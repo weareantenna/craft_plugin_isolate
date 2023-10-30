@@ -339,12 +339,28 @@ class IsolateService extends Component
      * @param bool $getDrafts
      * @return array
      */
-    public function getUserEntries(int $userId, int $sectionId = null, int $limit = 50, bool $getDrafts = false)
-    {
-        $ids = $this->getUserEntriesIds($userId, $sectionId);
+	public function getUserEntries(int $userId, int $sectionId = null, int $limit = 50, bool $getDrafts = false)
+	{
+		$ids = $this->getUserEntriesIds($userId, $sectionId);
+		$user = User::findOne($userId);
+		$library = Entry::find()->siteId('*')->section('libraries')->libraryUsers([$user])->one();
+		$siteId = $library->libraryAddressCountry == 'Nederland' ? 2 : 1;
 
-        return Entry::find()->id($ids)->status(null)->limit($limit)->drafts($getDrafts);
-    }
+		$entries = Entry::find()->id($ids)->status(null)->limit($limit)->drafts($getDrafts);
+
+		// Libraries
+		if($sectionId == 11) {
+			$entries->siteId('*');
+		}
+
+		// Adoptions
+		if( $sectionId == 15) {
+			return Entry::find()->siteId($siteId)->section('adoptions')->adoptionLibrary([$library])->status(null)->limit($limit)->drafts($getDrafts);
+			$entries->siteId($siteId);
+		}
+
+		return $entries;
+	}
 
     /**
      * Checks if a user can edit an entry give a path
