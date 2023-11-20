@@ -359,6 +359,11 @@ class IsolateService extends Component
 			$entries->siteId($siteId);
 		}
 
+		// News
+		if( $sectionId == 8) {
+			return Entry::find()->siteId($siteId)->section('news')->authorId($userId)->status(null)->limit($limit)->drafts($getDrafts);
+		}
+
 		return $entries;
 	}
 
