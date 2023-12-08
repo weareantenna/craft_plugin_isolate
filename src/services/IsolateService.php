@@ -355,13 +355,13 @@ class IsolateService extends Component
 
 		// Adoptions
 		if( $sectionId == 15) {
-			return Entry::find()->siteId($siteId)->section('adoptions')->adoptionLibrary([$library])->status(null)->limit($limit)->drafts($getDrafts);
+			return Entry::find()->siteId('*')->section('adoptions')->adoptionLibrary([$library])->status(null)->limit($limit)->drafts($getDrafts);
 			$entries->siteId($siteId);
 		}
 
 		// News
 		if( $sectionId == 8) {
-			return Entry::find()->siteId($siteId)->section('news')->authorId($userId)->status(null)->limit($limit)->drafts($getDrafts);
+			return Entry::find()->siteId('*')->section('news')->authorId($userId)->status(null)->limit($limit)->drafts($getDrafts);
 		}
 
 		return $entries;
