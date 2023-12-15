@@ -26,9 +26,14 @@
   {% if craft.app.request.getSegment(3) %}
     {% set section = craft.app.sections.getSectionByHandle(craft.app.request.getSegment(3)) %}
 
+    {% if currentUser.can("createEntries:" ~ section.uid) and section.handle == 'adoptions' %}
+      <a href="/actions/site/adoption/export" class="btn add icon">Export</a>
+    {% endif %}
+
     {% if currentUser.can("createEntries:" ~ section.uid) %}
       <a href="{{ url('entries/' ~ section.handle ~ '/new') }}" class="btn submit add icon">New entry</a>
     {% endif %}
+    
   {% endif %}
 {% endblock %}
 
